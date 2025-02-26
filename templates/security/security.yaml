@@ -1,0 +1,85 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: "AWS Network Firewall Security Stack"
+
+Parameters: {}
+
+Resources:
+  # AWS Network Firewall
+  NetworkFirewall:
+    Type: AWS::NetworkFirewall::Firewall
+    Properties:
+      FirewallName: "SecurityFirewall"
+      FirewallPolicyArn: !Ref NetworkFirewallPolicy
+      VpcId: !ImportValue Networking-VPCId
+      SubnetMappings:
+        - SubnetId: !ImportValue Networking-FirewallSubnet1Id
+        - SubnetId: !ImportValue Networking-FirewallSubnet2Id
+        - SubnetId: !ImportValue Networking-RdsFirewallSubnetId
+      DeleteProtection: false
+      SubnetChangeProtection: false
+      FirewallPolicyChangeProtection: false
+      Tags:
+        - Key: Name
+          Value: "AWS-Network-Firewall"
+
+  # AWS Network Firewall Policy
+  NetworkFirewallPolicy:
+    Type: AWS::NetworkFirewall::FirewallPolicy
+    Properties:
+      FirewallPolicyName: "SecurityFirewallPolicy"
+      FirewallPolicy:
+        StatelessRuleGroupReferences: []
+        StatefulRuleGroupReferences: []
+        StatelessDefaultActions:
+          - "aws:forward_to_sfe"
+        StatelessFragmentDefaultActions:
+          - "aws:forward_to_sfe"
+      Tags:
+        - Key: Name
+          Value: "AWS-Network-Firewall-Policy"
+
+  # AWS Network Firewall Logging
+  NetworkFirewallLogging:
+    Type: AWS::NetworkFirewall::LoggingConfiguration
+    Properties:
+      FirewallArn: !Ref NetworkFirewall
+      LoggingConfiguration:
+        LogDestinationConfigs:
+          - LogDestinationType: "CloudWatchLogs"
+            LogDestination:
+              logGroup: !Ref FirewallLogGroup
+            LogType: "FLOW"
+
+  FirewallLogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: "/aws/network-firewall/security-logs"
+      RetentionInDays: 30
+      Tags:
+        - Key: Name
+          Value: "FirewallLogGroup"
+
+Outputs:
+  FirewallArn:
+    Description: "AWS Network Firewall ARN"
+    Value: !Ref NetworkFirewall
+    Export:
+      Name: !Sub "${AWS::StackName}-FirewallArn"
+
+  FirewallEndpointIds:
+    Description: "AWS Network Firewall Endpoint IDs"
+    Value: !Join [",", !GetAtt NetworkFirewall.EndpointIds]
+    Export:
+      Name: !Sub "${AWS::StackName}-FirewallEndpointIds"
+
+  FirewallPolicyArn:
+    Description: "AWS Network Firewall Policy ARN"
+    Value: !Ref NetworkFirewallPolicy
+    Export:
+      Name: !Sub "${AWS::StackName}-FirewallPolicyArn"
+
+  FirewallLogGroupArn:
+    Description: "CloudWatch Log Group ARN for Firewall Logs"
+    Value: !GetAtt FirewallLogGroup.Arn
+    Export:
+      Name: !Sub "${AWS::StackName}-FirewallLogGroupArn"
