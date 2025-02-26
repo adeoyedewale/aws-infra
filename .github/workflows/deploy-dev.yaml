@@ -4,9 +4,6 @@ on:
   push:
     branches:
       - dev
-    paths:
-      - "templates/**"
-      - "deployment/deploy-stack.sh"
 
 jobs:
   deploy:
