@@ -51,7 +51,6 @@ Resources:
       VpcId: !Ref VPC
       CidrBlock: !Ref FirewallSubnet1CIDR
       AvailabilityZone: !Select [ 0, !GetAZs "" ]
-      MapPublicIpOnLaunch: false
       Tags:
         - Key: Name
           Value: "FirewallSubnet1"
@@ -62,7 +61,6 @@ Resources:
       VpcId: !Ref VPC
       CidrBlock: !Ref FirewallSubnet2CIDR
       AvailabilityZone: !Select [ 1, !GetAZs "" ]
-      MapPublicIpOnLaunch: false
       Tags:
         - Key: Name
           Value: "FirewallSubnet2"
@@ -73,7 +71,6 @@ Resources:
       VpcId: !Ref VPC
       CidrBlock: !Ref RdsFirewallSubnetCIDR
       AvailabilityZone: !Select [ 2, !GetAZs "" ]
-      MapPublicIpOnLaunch: false
       Tags:
         - Key: Name
           Value: "RdsFirewallSubnet"
