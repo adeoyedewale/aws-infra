@@ -1,0 +1,161 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: "Networking Stack for VPC with Internet Gateway and Firewall subnets"
+
+Parameters:
+  VpcCIDR:
+    Type: String
+    Description: "CIDR block for the VPC"
+  FirewallSubnet1CIDR:
+    Type: String
+    Description: "CIDR block for the first firewall subnet"
+  FirewallSubnet2CIDR:
+    Type: String
+    Description: "CIDR block for the second firewall subnet"
+  RdsFirewallSubnetCIDR:
+    Type: String
+    Description: "CIDR block for the RDS firewall subnet"
+  CustomerSubnet1CIDR:
+    Type: String
+    Description: "CIDR block for the first customer subnet"
+  CustomerSubnet2CIDR:
+    Type: String
+    Description: "CIDR block for the second customer subnet"
+  RdsNetworkInterfaceCIDR:
+    Type: String
+    Description: "CIDR block for the RDS Network Interface subnet"
+
+Resources:
+  VPC:
+    Type: AWS::EC2::VPC
+    Properties:
+      CidrBlock: !Ref VpcCIDR
+      EnableDnsSupport: true
+      EnableDnsHostnames: true
+      Tags: 
+        - Key: Name
+          Value: "VPC-Network"
+
+  InternetGateway:
+    Type: AWS::EC2::InternetGateway
+
+  AttachInternetGateway:
+    Type: AWS::EC2::VPCGatewayAttachment
+    Properties:
+      VpcId: !Ref VPC
+      InternetGatewayId: !Ref InternetGateway
+
+
+  FirewallSubnet1:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref VPC
+      CidrBlock: !Ref FirewallSubnet1CIDR
+      AvailabilityZone: !Select [ 0, !GetAZs "" ]
+      MapPublicIpOnLaunch: false
+      Tags:
+        - Key: Name
+          Value: "FirewallSubnet1"
+
+  FirewallSubnet2:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref VPC
+      CidrBlock: !Ref FirewallSubnet2CIDR
+      AvailabilityZone: !Select [ 1, !GetAZs "" ]
+      MapPublicIpOnLaunch: false
+      Tags:
+        - Key: Name
+          Value: "FirewallSubnet2"
+
+  RdsFirewallSubnet:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref VPC
+      CidrBlock: !Ref RdsFirewallSubnetCIDR
+      AvailabilityZone: !Select [ 2, !GetAZs "" ]
+      MapPublicIpOnLaunch: false
+      Tags:
+        - Key: Name
+          Value: "RdsFirewallSubnet"
+
+  CustomerSubnet1:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref VPC
+      CidrBlock: !Ref CustomerSubnet1CIDR
+      AvailabilityZone: !Select [ 0, !GetAZs "" ]
+      MapPublicIpOnLaunch: true
+      Tags:
+        - Key: Name
+          Value: "CustomerSubnet1"
+
+  CustomerSubnet2:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref VPC
+      CidrBlock: !Ref CustomerSubnet2CIDR
+      AvailabilityZone: !Select [ 1, !GetAZs "" ]
+      MapPublicIpOnLaunch: true
+      Tags:
+        - Key: Name
+          Value: "CustomerSubnet2"
+
+  RdsNetworkInterfaceSubnet:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref VPC
+      CidrBlock: !Ref RdsNetworkInterfaceCIDR
+      AvailabilityZone: !Select [ 2, !GetAZs "" ]
+      MapPublicIpOnLaunch: false
+      Tags:
+        - Key: Name
+          Value: "RdsNetworkInterfaceSubnet"
+
+Outputs:
+  VPCId:
+    Description: "VPC ID"
+    Value: !Ref VPC
+    Export:
+      Name: !Sub "${AWS::StackName}-VPCId"
+
+  InternetGatewayId:
+    Description: "Internet Gateway ID"
+    Value: !Ref InternetGateway
+    Export:
+      Name: !Sub "${AWS::StackName}-InternetGatewayId"
+
+  FirewallSubnet1Id:
+    Description: "Firewall Subnet 1 ID"
+    Value: !Ref FirewallSubnet1
+    Export:
+      Name: !Sub "${AWS::StackName}-FirewallSubnet1Id"
+
+  FirewallSubnet2Id:
+    Description: "Firewall Subnet 2 ID"
+    Value: !Ref FirewallSubnet2
+    Export:
+      Name: !Sub "${AWS::StackName}-FirewallSubnet2Id"
+
+  RdsFirewallSubnetId:
+    Description: "RDS Firewall Subnet ID"
+    Value: !Ref RdsFirewallSubnet
+    Export:
+      Name: !Sub "${AWS::StackName}-RdsFirewallSubnetId"
+
+  CustomerSubnet1Id:
+    Description: "Customer Subnet 1 ID"
+    Value: !Ref CustomerSubnet1
+    Export:
+      Name: !Sub "${AWS::StackName}-CustomerSubnet1Id"
+
+  CustomerSubnet2Id:
+    Description: "Customer Subnet 2 ID"
+    Value: !Ref CustomerSubnet2
+    Export:
+      Name: !Sub "${AWS::StackName}-CustomerSubnet2Id"
+
+  RdsNetworkInterfaceSubnetId:
+    Description: "RDS Network Interface Subnet ID"
+    Value: !Ref RdsNetworkInterfaceSubnet
+    Export:
+      Name: !Sub "${AWS::StackName}-RdsNetworkInterfaceSubnetId"
