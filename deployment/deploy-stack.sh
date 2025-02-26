@@ -10,10 +10,10 @@ fi
 # Define stack template mapping
 declare -A STACK_TEMPLATES
 STACK_TEMPLATES[networking]="templates/networking/networking.yaml"
-STACK_TEMPLATES[security]="templates/security/security-stack.yaml"
-STACK_TEMPLATES[compute]="templates/compute/compute-stack.yaml"
-STACK_TEMPLATES[database]="templates/database/database-stack.yaml"
-STACK_TEMPLATES[storage]="templates/storage/storage-stack.yaml"
+STACK_TEMPLATES[security]="templates/security/security.yaml"
+STACK_TEMPLATES[compute]="templates/compute/compute.yaml"
+STACK_TEMPLATES[database]="templates/database/database.yaml"
+STACK_TEMPLATES[storage]="templates/storage/storage.yaml"
 
 # Check if stack exists in mapping
 TEMPLATE_FILE=${STACK_TEMPLATES[$STACK_NAME]}
