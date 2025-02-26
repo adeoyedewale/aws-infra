@@ -1,9 +1,8 @@
 #!/bin/bash
 
 STACK_NAME=$1
-ENV=$2
 
-if [[ -z "$STACK_NAME" || -z "$ENV" ]]; then
+if [[ -z "$STACK_NAME" ]]; then
   echo "Usage: $0 <stack-name>"
   exit 1
 fi
