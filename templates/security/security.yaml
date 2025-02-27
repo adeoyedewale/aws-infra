@@ -10,7 +10,7 @@ Resources:
     Properties:
       FirewallName: "SecurityFirewall"
       FirewallPolicyArn: !Ref NetworkFirewallPolicy
-      VpcId: !ImportValue Networking-VPCId
+      VpcId: !ImportValue networking-VPCId
       SubnetMappings:
         - SubnetId: !ImportValue networking-FirewallSubnet1Id
         - SubnetId: !ImportValue networking-FirewallSubnet2Id
