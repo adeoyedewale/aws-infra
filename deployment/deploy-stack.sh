@@ -22,10 +22,20 @@ if [[ -z "$TEMPLATE_FILE" ]]; then
   exit 1
 fi
 
+# Check if a parameter file exists for the stack
+PARAMS_FILE="templates/$STACK_NAME/params/dev-params.json"
+if [[ -f "$PARAMS_FILE" ]]; then
+  echo "📄 Using parameter file: $PARAMS_FILE"
+  PARAM_OVERRIDE="--parameter-overrides file://$PARAMS_FILE"
+else
+  echo "⚠️ No parameter file found for $STACK_NAME, skipping parameters."
+  PARAM_OVERRIDE=""
+fi
+
 # Deploy the CloudFormation stack
 aws cloudformation deploy --stack-name "$STACK_NAME" \
   --template-file "$TEMPLATE_FILE" \
-  --parameter-overrides file://templates/$STACK_NAME/params/dev-params.json \
+  $PARAM_OVERRIDE \
   --capabilities CAPABILITY_NAMED_IAM
 
 if [ $? -eq 0 ]; then
