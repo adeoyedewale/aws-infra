@@ -37,9 +37,10 @@ Resources:
 
   InternetGateway:
     Type: AWS::EC2::InternetGateway
-    Tags:
-      - Key: Name
-        Value: "IGW-Network"
+    Properties:
+      Tags:
+        - Key: Name
+          Value: "IGW-Network"
 
   AttachInternetGateway:
     Type: AWS::EC2::VPCGatewayAttachment
