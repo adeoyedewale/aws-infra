@@ -12,9 +12,9 @@ Resources:
       FirewallPolicyArn: !Ref NetworkFirewallPolicy
       VpcId: !ImportValue Networking-VPCId
       SubnetMappings:
-        - SubnetId: !ImportValue Networking-FirewallSubnet1Id
-        - SubnetId: !ImportValue Networking-FirewallSubnet2Id
-        - SubnetId: !ImportValue Networking-RdsFirewallSubnetId
+        - SubnetId: !ImportValue networking-FirewallSubnet1Id
+        - SubnetId: !ImportValue networking-FirewallSubnet2Id
+        - SubnetId: !ImportValue networking-RdsFirewallSubnetId
       DeleteProtection: false
       SubnetChangeProtection: false
       FirewallPolicyChangeProtection: false
