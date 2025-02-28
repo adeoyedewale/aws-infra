@@ -1,0 +1,168 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: "Routes Stack - Route Tables and Routes for Subnets and Internet Gateway"
+
+Parameters: {}
+
+Resources:
+  # Route Table for Firewall Subnet 1 (AZ1)
+  FirewallRouteTable1:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId: !ImportValue networking-VPCId
+      Tags:
+        - Key: Name
+          Value: "FirewallRouteTable1"
+
+  # Route Table for Firewall Subnet 2 (AZ2)
+  FirewallRouteTable2:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId: !ImportValue networking-VPCId
+      Tags:
+        - Key: Name
+          Value: "FirewallRouteTable2"
+
+  # Route Table for Rds Firewall Subnet (AZ3)
+  RdsFirewallRouteTable:
+    Type: AWS::EC2::RouteTable
+    Properties:
+         VpcId: !ImportValue networking-VPCId
+         Tags:
+          - Key: Name
+            Value: "RdsFirewallRouteTable"
+
+  # Public Route to IGW for Firewall Subnets
+  FirewallRoute1:
+    Type: AWS::EC2::Route
+    Properties:
+      RouteTableId: !Ref FirewallRouteTable1
+      DestinationCidrBlock: "0.0.0.0/0"
+      GatewayId: !ImportValue networking-InternetGatewayId
+
+  FirewallRoute2:
+    Type: AWS::EC2::Route
+    Properties:
+      RouteTableId: !Ref FirewallRouteTable2
+      DestinationCidrBlock: "0.0.0.0/0"
+      GatewayId: !ImportValue networking-InternetGatewayId
+
+  RdsFirewallRoute:
+    Type: AWS::EC2::Route
+    Properties:
+      RouteTableId: !Ref RdsFirewallRouteTable
+      DestinationCidrBlock: "0.0.0.0/0"
+      GatewayId: !ImportValue networking-InternetGatewayId
+
+
+  # Associate Firewall Subnets with Route Tables
+  FirewallSubnet1RouteAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      SubnetId: !ImportValue networking-FirewallSubnet1Id
+      RouteTableId: !Ref FirewallRouteTable1
+
+  FirewallSubnet2RouteAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      SubnetId: !ImportValue networking-FirewallSubnet2Id
+      RouteTableId: !Ref FirewallRouteTable2
+
+  RdsFirewallSubnetRouteAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      SubnetId: !ImportValue networking-RdsFirewallSubnetId
+      RouteTableId: !Ref RdsFirewallRouteTable
+
+  # Route Table for Customer Subnet 1 (AZ1)
+  CustomerRouteTable1:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId: !ImportValue networking-VPCId
+      Tags:
+        - Key: Name
+          Value: "CustomerRouteTable1"
+
+  # Route Table for Customer Subnet 2 (AZ2)
+  CustomerRouteTable2:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId: !ImportValue networking-VPCId
+      Tags:
+        - Key: Name
+          Value: "CustomerRouteTable2"
+
+  # Route Table for RDS Network Interface Subnet (AZ3)
+  RdsRouteTable:
+    Type: AWS::EC2::RouteTable
+    Properties:
+         VpcId: !ImportValue networking-VPCId
+         Tags:
+          - Key: Name
+            Value: "RdsRouteTable"
+
+  # Route for Customer Subnets to Firewall Endpoints
+  CustomerRoute1:
+    Type: AWS::EC2::Route
+    Properties:
+      RouteTableId: !Ref CustomerRouteTable1
+      DestinationCidrBlock: "0.0.0.0/0"
+      VpcEndpointId: !ImportValue security-FirewallSubnet1EndpointId
+
+  CustomerRoute2:
+    Type: AWS::EC2::Route
+    Properties:
+      RouteTableId: !Ref CustomerRouteTable2
+      DestinationCidrBlock: "0.0.0.0/0"
+      VpcEndpointId: !ImportValue security-FirewallSubnet2EndpointId
+
+  RdsRoute:
+    Type: AWS::EC2::Route
+    Properties:
+      RouteTableId: !Ref RdsRouteTable
+      DestinationCidrBlock: "0.0.0.0/0"
+      VpcEndpointId: !ImportValue security-RdsFirewallSubnetId
+
+
+  # Associate Customer Subnets with Route Tables
+  CustomerSubnet1RouteAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      SubnetId: !ImportValue networking-CustomerSubnet1Id
+      RouteTableId: !Ref CustomerRouteTable1
+
+  CustomerSubnet2RouteAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      SubnetId: !ImportValue networking-CustomerSubnet2Id
+      RouteTableId: !Ref CustomerRouteTable2
+
+  RdsNetworkInterfaceSubnetRouteAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      SubnetId: !ImportValue networking-RdsNetworkInterfaceSubnetId
+      RouteTableId: !Ref RdsRouteTable
+
+Outputs:
+  FirewallRouteTable1Id:
+    Description: "Firewall Route Table ID for AZ1"
+    Value: !Ref FirewallRouteTable1
+    Export:
+      Name: !Sub "${AWS::StackName}-FirewallRouteTable1Id"
+
+  FirewallRouteTable2Id:
+    Description: "Firewall Route Table ID for AZ2"
+    Value: !Ref FirewallRouteTable2
+    Export:
+      Name: !Sub "${AWS::StackName}-FirewallRouteTable2Id"
+
+  CustomerRouteTable1Id:
+    Description: "Customer Route Table ID for AZ1"
+    Value: !Ref CustomerRouteTable1
+    Export:
+      Name: !Sub "${AWS::StackName}-CustomerRouteTable1Id"
+
+  CustomerRouteTable2Id:
+    Description: "Customer Route Table ID for AZ2"
+    Value: !Ref CustomerRouteTable2
+    Export:
+      Name: !Sub "${AWS::StackName}-CustomerRouteTable2Id"

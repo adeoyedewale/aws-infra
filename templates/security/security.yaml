@@ -72,6 +72,24 @@ Outputs:
     Export:
       Name: !Sub "${AWS::StackName}-FirewallEndpointIds"
 
+  FirewallSubnet1EndpointId:
+    Description: "AWS Network Firewall Subnet1 Endpoint ID"
+    Value: !Select [0, !GetAtt NetworkFirewall.EndpointIds]
+    Export:
+      Name: !Sub "${AWS::StackName}-FirewallSubnet1EndpointId"
+
+  FirewallSubnet2EndpointId:
+    Description: "AWS Network Firewall Subnet2 Endpoint ID"
+    Value: !Select [1, !GetAtt NetworkFirewall.EndpointIds]
+    Export:
+      Name: !Sub "${AWS::StackName}-FirewallSubnet2EndpointId"
+
+  RdsFirewallSubnetId:
+    Description: "AWS Network Firewall Subnet1 Endpoint ID"
+    Value: !Select [2, !GetAtt NetworkFirewall.EndpointIds]
+    Export:
+      Name: !Sub "${AWS::StackName}-RdsFirewallSubnetId"
+
   FirewallPolicyArn:
     Description: "AWS Network Firewall Policy ARN"
     Value: !Ref NetworkFirewallPolicy
