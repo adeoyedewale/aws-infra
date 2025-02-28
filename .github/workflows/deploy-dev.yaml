@@ -26,4 +26,4 @@ jobs:
         run: |
           chmod +x deployment/deploy-stack.sh
           ./deployment/deploy-stack.sh networking
-          ./deployment/deploy-stack.sh security
+          #./deployment/deploy-stack.sh security
