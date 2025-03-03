@@ -4,6 +4,67 @@ Description: "AWS Network Firewall Security Stack"
 Parameters: {}
 
 Resources:
+  LambdaExecutionRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: LambdaNetworkFirewallRole
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+            Action: "sts:AssumeRole"
+      Policies:
+        - PolicyName: LambdaNetworkFirewallPolicy
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action:
+                  - "logs:CreateLogGroup"
+                  - "logs:CreateLogStream"
+                  - "logs:PutLogEvents"
+                Resource: "*"
+
+  NetworkFirewallEndpointsFunction:
+    Type: AWS::Lambda::Function
+    Properties:
+      Description: Custom resource to transform Network Firewall EndpointIds
+      Handler: index.lambda_handler
+      Runtime: python3.9
+      Timeout: 10
+      Role: !GetAtt LambdaExecutionRole.Arn
+      FunctionName: transform-networkfirewall-endpointids
+      Code:
+        ZipFile: |
+            import json
+            import cfnresponse
+
+            def lambda_handler(event, context):
+                try:
+                    if event['RequestType'] in ['Create', 'Update']:
+                        endpoint_ids = event['ResourceProperties'].get('EndpointIds', [])
+                        transformed_endpoints = {f"Id{eid.split(':')[0][-1].upper()}": eid.split(':')[-1] for eid in endpoint_ids}
+
+                        response_data = transformed_endpoints
+                        physical_id = "NetworkFirewallEndpoints"
+                    else:
+                        response_data = {}
+                        physical_id = event.get('PhysicalResourceId', "NetworkFirewallEndpoints")
+
+                    cfnresponse.send(event, context, cfnresponse.SUCCESS, response_data, physical_id)
+                except Exception as e:
+                    response_data = {"Error": str(e)}
+                    cfnresponse.send(event, context, cfnresponse.FAILED, response_data, "NetworkFirewallEndpoints")
+
+  NetworkFirewallEndpoints:
+    Type: Custom::NetworkFirewallEndpoints
+    Properties:
+        ServiceToken: !GetAtt NetworkFirewallEndpointsFunction.Arn
+        EndpointIds: !GetAtt NetworkFirewall.EndpointIds
+
+
   # AWS Network Firewall
   NetworkFirewall:
     Type: AWS::NetworkFirewall::Firewall
@@ -77,13 +138,13 @@ Outputs:
   FirewallSubnet1EndpointId:
     Description: "AWS Network Firewall Subnet1 Endpoint ID"
     #Value: !Select [0, !GetAtt NetworkFirewall.EndpointIds]
-    Value: !Select [0, !GetAtt NetworkFirewall.EndpointIds]
+    Value: !GetAtt NetworkFirewallEndpoints.IdA
     Export:
       Name: !Sub "${AWS::StackName}-FirewallSubnet1EndpointId"
 
   FirewallSubnet2EndpointId:
     Description: "AWS Network Firewall Subnet2 Endpoint ID"
-    Value: !Select [1, !GetAtt NetworkFirewall.EndpointIds]
+    Value: !GetAtt NetworkFirewallEndpoints.IdB
     Export:
       Name: !Sub "${AWS::StackName}-FirewallSubnet2EndpointId"
 
