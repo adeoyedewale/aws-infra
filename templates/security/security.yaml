@@ -77,7 +77,7 @@ Outputs:
   FirewallSubnet1EndpointId:
     Description: "AWS Network Firewall Subnet1 Endpoint ID"
     #Value: !Select [0, !GetAtt NetworkFirewall.EndpointIds]
-    Value: Fn::Select [0, !GetAtt [NetworkFirewall, EndpointIds]]
+    Value: !Select [0, !GetAtt NetworkFirewall.EndpointIds]
     Export:
       Name: !Sub "${AWS::StackName}-FirewallSubnet1EndpointId"
 
