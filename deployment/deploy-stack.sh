@@ -11,7 +11,7 @@ fi
 declare -A STACK_TEMPLATES
 STACK_TEMPLATES[networking]="templates/networking/networking.yaml"
 STACK_TEMPLATES[security]="templates/security/security.yaml"
-STACK_TEMPLATES[compute]="templates/compute/compute.yaml"
+STACK_TEMPLATES[compute]="templates/routes/routes.yaml"
 STACK_TEMPLATES[database]="templates/database/database.yaml"
 STACK_TEMPLATES[storage]="templates/storage/storage.yaml"
 
