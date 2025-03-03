@@ -150,7 +150,7 @@ Outputs:
 
   RdsFirewallSubnetEndpointId:
     Description: "AWS Network Firewall Subnet1 Endpoint ID"
-    Value: GetAtt NetworkFirewallEndpoints.IdC
+    Value: !GetAtt NetworkFirewallEndpoints.IdC
     Export:
       Name: !Sub "${AWS::StackName}-RdsFirewallSubnetEndpointId"
 
