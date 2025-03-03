@@ -70,9 +70,15 @@ Outputs:
 
   FirewallEndpointIds:
     Description: "AWS Network Firewall Endpoint IDs"
-    Value: !Join [" ", !GetAtt NetworkFirewall.EndpointIds]
+    Value: !Join [":", !GetAtt NetworkFirewall.EndpointIds]
     Export:
       Name: !Sub "${AWS::StackName}-FirewallEndpointIds"
+
+  FirewallSubnet1EndpointId:
+    Description: "AWS Network Firewall Subnet1 Endpoint ID"
+    Value: !Select [0, !GetAtt NetworkFirewall.EndpointIds]
+    Export:
+      Name: !Sub "${AWS::StackName}-FirewallSubnet1EndpointId"
 
   FirewallSubnet2EndpointId:
     Description: "AWS Network Firewall Subnet2 Endpoint ID"
