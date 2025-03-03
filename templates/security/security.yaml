@@ -22,6 +22,8 @@ Resources:
         - Key: Name
           Value: "AWS-Network-Firewall"
 
+    
+
   # AWS Network Firewall Policy
   NetworkFirewallPolicy:
     Type: AWS::NetworkFirewall::FirewallPolicy
@@ -68,13 +70,13 @@ Outputs:
 
   FirewallEndpointIds:
     Description: "AWS Network Firewall Endpoint IDs"
-    Value: !Join [",", !GetAtt NetworkFirewall.EndpointIds]
+    Value: !Join [":", !GetAtt NetworkFirewall.EndpointIds]
     Export:
       Name: !Sub "${AWS::StackName}-FirewallEndpointIds"
 
   FirewallSubnet1EndpointId:
     Description: "AWS Network Firewall Subnet1 Endpoint ID"
-    Value: !Select [0, !GetAtt NetworkFirewall.EndpointIds]
+    Value: {!Split: [":", {!Select [0, !GetAtt NetworkFirewall.EndpointIds]}]}
     Export:
       Name: !Sub "${AWS::StackName}-FirewallSubnet1EndpointId"
 
