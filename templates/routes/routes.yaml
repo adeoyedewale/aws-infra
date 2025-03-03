@@ -11,9 +11,6 @@ Parameters:
   RdsNetworkInterfaceCIDR:
     Type: String
     Description: "CIDR block for the RDS Network Interface subnet"
-  FirewallSubnet1EndpointId:
-    Type: String
-    Default: !ImportValue security-FirewallSubnet1EndpointId
 
 Resources:
   # Route Table for Firewall Subnet 1 (AZ1)
@@ -118,7 +115,7 @@ Resources:
     Properties:
       RouteTableId: !Ref CustomerRouteTable1
       DestinationCidrBlock: "0.0.0.0/0"
-      VpcEndpointId: !Ref FirewallSubnet1EndpointId
+      VpcEndpointId: 
 
   CustomerRoute2:
     Type: AWS::EC2::Route
