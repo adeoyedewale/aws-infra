@@ -1,7 +1,16 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Description: "Routes Stack - Route Tables and Routes for Subnets and Internet Gateway"
 
-Parameters: {}
+Parameters:
+  CustomerSubnet1CIDR:
+    Type: String
+    Description: "CIDR block for the first customer subnet"
+  CustomerSubnet2CIDR:
+    Type: String
+    Description: "CIDR block for the second customer subnet"
+  RdsNetworkInterfaceCIDR:
+    Type: String
+    Description: "CIDR block for the RDS Network Interface subnet"
 
 Resources:
   # Route Table for Firewall Subnet 1 (AZ1)
@@ -141,6 +150,44 @@ Resources:
     Properties:
       SubnetId: !ImportValue networking-RdsNetworkInterfaceSubnetId
       RouteTableId: !Ref RdsRouteTable
+
+  # Route Table for Internet Gateway
+  InternetGatewayRouteTable:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId: !ImportValue networking-VPCId
+      Tags:
+        - Key: Name
+          Value: "InternetGatewayTable"
+
+  # Routes for Internet Gataeway to firewall endpoints
+  InternetGatewayRoute1:
+    Type: AWS::EC2::Route
+    Properties:
+      RouteTableId: !Ref InternetGatewayRouteTable
+      DestinationCidrBlock: !Ref CustomerSubnet1CIDR
+      VpcEndpointId: !ImportValue security-FirewallSubnet1EndpointId
+
+  InternetGatewayRoute2:
+    Type: AWS::EC2::Route
+    Properties:
+      RouteTableId: !Ref InternetGatewayRouteTable
+      DestinationCidrBlock: !Ref CustomerSubnet2CIDR
+      VpcEndpointId: !ImportValue security-FirewallSubnet2EndpointId
+  
+  InternetGatewayRoute3:
+    Type: AWS::EC2::Route
+    Properties:
+      RouteTableId: !Ref InternetGatewayRouteTable
+      DestinationCidrBlock: !Ref RdsNetworkInterfaceCIDR
+      VpcEndpointId: !ImportValue security--RdsFirewallSubnetId
+
+  # Associate Internet Gateway with Route Table
+  InternetGatewayRouteAssociation:
+    Type: AWS::EC2::GatewayRouteTableAssociation
+    Properties:
+      GatewayId: !ImportValue networking-InternetGatewayId
+      RouteTableId: !Ref InternetGatewayRouteTable
 
 Outputs:
   FirewallRouteTable1Id:

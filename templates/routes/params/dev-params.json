@@ -1,0 +1,5 @@
+[
+    { "ParameterKey": "CustomerSubnet1CIDR", "ParameterValue": "172.16.0.0/20" },
+    { "ParameterKey": "CustomerSubnet2CIDR", "ParameterValue": "172.16.16.0/20" },
+    { "ParameterKey": "RdsNetworkInterfaceCIDR", "ParameterValue": "172.16.32.0/20" }
+  ]
