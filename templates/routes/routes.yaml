@@ -129,7 +129,7 @@ Resources:
     Properties:
       RouteTableId: !Ref RdsRouteTable
       DestinationCidrBlock: "0.0.0.0/0"
-      VpcEndpointId: !ImportValue security-RdsFirewallSubnetId
+      VpcEndpointId: !ImportValue security-RdsFirewallSubnetEndpointId
 
 
   # Associate Customer Subnets with Route Tables
