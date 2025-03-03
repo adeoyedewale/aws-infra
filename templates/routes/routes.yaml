@@ -180,7 +180,7 @@ Resources:
     Properties:
       RouteTableId: !Ref InternetGatewayRouteTable
       DestinationCidrBlock: !Ref RdsNetworkInterfaceCIDR
-      VpcEndpointId: !ImportValue security--RdsFirewallSubnetId
+      VpcEndpointId: !ImportValue security-RdsFirewallSubnetId
 
   # Associate Internet Gateway with Route Table
   InternetGatewayRouteAssociation:
