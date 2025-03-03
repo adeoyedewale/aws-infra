@@ -115,7 +115,7 @@ Resources:
     Properties:
       RouteTableId: !Ref CustomerRouteTable1
       DestinationCidrBlock: "0.0.0.0/0"
-      VpcEndpointId: 
+      VpcEndpointId: !ImportValue security-FirewallSubnet1EndpointId
 
   CustomerRoute2:
     Type: AWS::EC2::Route
