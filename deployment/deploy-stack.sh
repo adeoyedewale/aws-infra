@@ -12,7 +12,7 @@ declare -A STACK_TEMPLATES
 STACK_TEMPLATES[networking]="templates/networking/networking.yaml"
 STACK_TEMPLATES[security]="templates/security/security.yaml"
 STACK_TEMPLATES[routes]="templates/routes/routes.yaml"
-STACK_TEMPLATES[database]="templates/database/database.yaml"
+STACK_TEMPLATES[security-groups]="templates/security-groups/security-groups.yaml"
 STACK_TEMPLATES[storage]="templates/storage/storage.yaml"
 
 # Check if stack exists in mapping
