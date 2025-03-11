@@ -47,46 +47,57 @@ Resources:
           FromPort: 22
           ToPort: 22
           CidrIp: !Sub "${OpsAllowedIP1}/32"
+          Description: "Michelle WS Home"
         - IpProtocol: "tcp"
           FromPort: 22
           ToPort: 22
           CidrIp: !Sub "${OpsAllowedIP2}/32"
+          Description: "Michelle WS Home 2"
         - IpProtocol: "tcp"
           FromPort: 22
           ToPort: 22
           CidrIp: !Sub "${OpsAllowedIP3}/32"
+          Description: "Nick Home 2"
         - IpProtocol: "tcp"
           FromPort: 22
           ToPort: 22
           CidrIp: !Sub "${OpsAllowedIP4}/32"
+          Description: "Troy WS Home"
         - IpProtocol: "tcp"
           FromPort: 22
           ToPort: 22
           CidrIp: !Sub "${OpsAllowedIP5}/32"
+          Description: "WS Office"
         - IpProtocol: "tcp"
           FromPort: 22
           ToPort: 22
           CidrIp: !Sub "${OpsAllowedIP6}/32"
+          Description: "Cindy WS Home"
         - IpProtocol: "tcp"
           FromPort: 22
           ToPort: 22
           CidrIp: !Sub "${OpsAllowedIP7}/32"
+          Description: "Tin WS Home"
         - IpProtocol: "tcp"
           FromPort: 22
           ToPort: 22
           CidrIp: !Sub "${OpsAllowedIP8}/32"
+          Description:  "Nick WS Home"
         - IpProtocol: "tcp"
           FromPort: 22
           ToPort: 22
           CidrIp: !Sub "${OpsAllowedIP9}/32"
+          Description: "Wale WS Home"
         - IpProtocol: "tcp"
           FromPort: 22
           ToPort: 22
           CidrIp: !Sub "${OpsAllowedIP10}/32"
+          Description: "OPENVPN Access"
         - IpProtocol: "tcp"
           FromPort: 22
           ToPort: 22
           CidrIp: !Sub "${OpsAllowedIP11}/32"
+          Description: "Chris WS Home"
       Tags:
         - Key: Name
           Value: "SSH_ACCESS"
@@ -101,10 +112,12 @@ Resources:
           FromPort: 80
           ToPort: 80
           CidrIp: "0.0.0.0/0"
+          Description: "Allows HTTP traffic"
         - IpProtocol: "tcp"
           FromPort: 443
           ToPort: 443
           CidrIp: "0.0.0.0/0"
+          Description: "Allows HTTPS traffic"
       SecurityGroupEgress:
         - IpProtocol: "-1"
           CidrIp: "0.0.0.0/0"
