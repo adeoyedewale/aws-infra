@@ -36,7 +36,7 @@ fi
 aws cloudformation deploy --stack-name "$STACK_NAME" \
   --template-file "$TEMPLATE_FILE" \
   $PARAM_OVERRIDE \
-  --capabilities CAPABILITY_NAMED_IAM
+  --capabilities CAPABILITY_NAMED_IAM CAPABILITY_AUTO_EXPAND
 
 if [ $? -eq 0 ]; then
   echo "Successfully deployed $STACK_NAME."
