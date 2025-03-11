@@ -1,4 +1,48 @@
-[
-    { "ParameterKey": "OpsAllowedIPs", "ParameterValue": "162.227.102.18,135.26.72.81,108.194.217.158,10.8.0.0,76.184.49.141,76.198.239.182,104.1.113.24,76.187.168.199,76.183.147.209,97.77.243.154,135.26.72.81" }
-  ]
+
+  [
+    {
+        "ParameterKey": "OpsAllowedIP1",
+        "ParameterValue": "162.227.102.18"
+    },
+    {
+        "ParameterKey": "OpsAllowedIP2",
+        "ParameterValue": "135.26.72.81"
+    },
+    {
+        "ParameterKey": "OpsAllowedIP3",
+        "ParameterValue": "108.194.217.158"
+    },
+    {
+        "ParameterKey": "OpsAllowedIP4",
+        "ParameterValue": "10.8.0.0"
+    },
+    {
+        "ParameterKey": "OpsAllowedIP5",
+        "ParameterValue": "76.184.49.141"
+    },
+    {
+        "ParameterKey": "OpsAllowedIP6",
+        "ParameterValue": "76.198.239.182"
+    },
+    {
+        "ParameterKey": "OpsAllowedIP7",
+        "ParameterValue": "104.1.113.24"
+    },
+    {
+        "ParameterKey": "OpsAllowedIP8",
+        "ParameterValue": "76.187.168.199"
+    },
+     {
+        "ParameterKey": "OpsAllowedIP9",
+        "ParameterValue": "76.183.147.209"
+    },
+    {
+        "ParameterKey": "OpsAllowedIP10",
+        "ParameterValue": "97.77.243.154"
+    },
+    {
+        "ParameterKey": "OpsAllowedIP11",
+        "ParameterValue": "135.26.72.81"
+    }
+ ]
   

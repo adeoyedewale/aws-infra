@@ -1,10 +1,41 @@
 AWSTemplateFormatVersion: 2010-09-09
 Description: "Security Groups for SSH Access (Specific IPs) and Internet-Facing ALB"
+
 Parameters:
-  OpsAllowedIPs:
-    Type: CommaDelimitedList
-    Description: "List of allowed individual IPs for SSH access (comma-separated)"
-Transform: 'AWS::LanguageExtensions'
+  OpsAllowedIP1:
+    Type: String
+    Description: "Michelle WS Home"
+  OpsAllowedIP2:
+    Type: String
+    Description: "Michelle WS Home 2"
+  OpsAllowedIP3:
+    Type: String
+    Description: "Nick Home 2"
+  OpsAllowedIP4:
+    Type: String
+    Description: "Troy WS Home"
+  OpsAllowedIP5:
+    Type: String
+    Description: "WS Office"
+  OpsAllowedIP6:
+    Type: String
+    Description: "Cindy WS Home"
+  OpsAllowedIP7:
+    Type: String
+    Description: "Tin WS Home"
+  OpsAllowedIP8:
+    Type: String
+    Description: "Nick WS Home"
+  OpsAllowedIP9:
+    Type: String
+    Description: "Wale WS Home"
+  OpsAllowedIP10:
+    Type: String
+    Description: "OPENVPN Access"
+  OpsAllowedIP11:
+    Type: String
+    Description: "Chris WS Home"
+
 Resources:
   OpsSecurityGroup:
     Type: AWS::EC2::SecurityGroup
@@ -12,17 +43,53 @@ Resources:
       GroupDescription: "Allows SSH access only from specific IPs"
       VpcId: !ImportValue networking-VPCId
       SecurityGroupIngress:
-        'Fn::ForEach::SSHIngressRule':
-          - IP
-          - !Ref OpsAllowedIPs
-          - 
-        IpProtocol: "tcp"
-        FromPort: 22
-        ToPort: 22
-        CidrIp: !Sub "${IP}/32"
+        - IpProtocol: "tcp"
+          FromPort: 22
+          ToPort: 22
+          CidrIp: !Sub "${OpsAllowedIP1}/32"
+        - IpProtocol: "tcp"
+          FromPort: 22
+          ToPort: 22
+          CidrIp: !Sub "${OpsAllowedIP2}/32"
+        - IpProtocol: "tcp"
+          FromPort: 22
+          ToPort: 22
+          CidrIp: !Sub "${OpsAllowedIP3}/32"
+        - IpProtocol: "tcp"
+          FromPort: 22
+          ToPort: 22
+          CidrIp: !Sub "${OpsAllowedIP4}/32"
+        - IpProtocol: "tcp"
+          FromPort: 22
+          ToPort: 22
+          CidrIp: !Sub "${OpsAllowedIP5}/32"
+        - IpProtocol: "tcp"
+          FromPort: 22
+          ToPort: 22
+          CidrIp: !Sub "${OpsAllowedIP6}/32"
+        - IpProtocol: "tcp"
+          FromPort: 22
+          ToPort: 22
+          CidrIp: !Sub "${OpsAllowedIP7}/32"
+        - IpProtocol: "tcp"
+          FromPort: 22
+          ToPort: 22
+          CidrIp: !Sub "${OpsAllowedIP8}/32"
+        - IpProtocol: "tcp"
+          FromPort: 22
+          ToPort: 22
+          CidrIp: !Sub "${OpsAllowedIP9}/32"
+        - IpProtocol: "tcp"
+          FromPort: 22
+          ToPort: 22
+          CidrIp: !Sub "${OpsAllowedIP10}/32"
+        - IpProtocol: "tcp"
+          FromPort: 22
+          ToPort: 22
+          CidrIp: !Sub "${OpsAllowedIP11}/32"
       Tags:
         - Key: Name
-          Value: "OpsSecurityGroup"
+          Value: "SSH_ACCESS"
 
   AlbSecurityGroup:
     Type: AWS::EC2::SecurityGroup
