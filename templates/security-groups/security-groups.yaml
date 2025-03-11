@@ -1,0 +1,59 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: "Security Groups for SSH Access (Specific IPs) and Internet-Facing ALB"
+Parameters:
+  OpsAllowedIPs:
+    Type: CommaDelimitedList
+    Description: "List of allowed individual IPs for SSH access (comma-separated)"
+Transform: 'AWS::LanguageExtensions'
+Resources:
+  OpsSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: "Allows SSH access only from specific IPs"
+      VpcId: !ImportValue networking-VPCId
+      SecurityGroupIngress:
+        'Fn::ForEach::SSHIngressRule':
+          - IP
+          - !Ref OpsAllowedIPs
+          - 
+        IpProtocol: "tcp"
+        FromPort: 22
+        ToPort: 22
+        CidrIp: !Sub "${IP}/32"
+      Tags:
+        - Key: Name
+          Value: "OpsSecurityGroup"
+
+  AlbSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: "Allows HTTP/HTTPS traffic from anywhere"
+      VpcId: !ImportValue networking-VPCId
+      SecurityGroupIngress:
+        - IpProtocol: "tcp"
+          FromPort: 80
+          ToPort: 80
+          CidrIp: "0.0.0.0/0"
+        - IpProtocol: "tcp"
+          FromPort: 443
+          ToPort: 443
+          CidrIp: "0.0.0.0/0"
+      SecurityGroupEgress:
+        - IpProtocol: "-1"
+          CidrIp: "0.0.0.0/0"
+      Tags:
+        - Key: Name
+          Value: "INTERNET_FACING_ALB"
+
+Outputs:
+  OpsSecurityGroupId:
+    Description: "Security Group ID for SSH Access"
+    Value: !Ref OpsSecurityGroup
+    Export:
+      Name: !Sub "${AWS::StackName}-OpsSecurityGroupId"
+
+  AlbSecurityGroupId:
+    Description: "Security Group ID for Internet-Facing ALB"
+    Value: !Ref AlbSecurityGroup
+    Export:
+      Name: !Sub "${AWS::StackName}-AlbSecurityGroupId"
