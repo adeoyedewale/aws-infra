@@ -131,7 +131,7 @@ Resources:
           FromPort: 2377
           ToPort: 2377
           SourceSecurityGroupId: !Ref SwarmWorkerSecurityGroup
-          Description: "Allows worker nodes to communicate with manager nodes for cluster management"
+          Description: "Allows worker nodes to communicate with manager nodes"
         - IpProtocol: "tcp"
           FromPort: 7946
           ToPort: 7946
