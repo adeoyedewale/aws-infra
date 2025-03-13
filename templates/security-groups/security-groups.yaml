@@ -118,12 +118,98 @@ Resources:
           ToPort: 443
           CidrIp: "0.0.0.0/0"
           Description: "Allows HTTPS traffic"
-      SecurityGroupEgress:
-        - IpProtocol: "-1"
-          CidrIp: "0.0.0.0/0"
       Tags:
         - Key: Name
           Value: "INTERNET_FACING_ALB"
+  SwarmManagerSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: "Security Group for Docker Swarm Managers"
+      VpcId: !ImportValue networking-VPCId
+      SecurityGroupIngress:
+        - IpProtocol: "tcp"
+          FromPort: 2377
+          ToPort: 2377
+          CidrIp: !Ref SwarmWorkerSecurityGroup
+        - IpProtocol: "tcp"
+          FromPort: 7946
+          ToPort: 7946
+          SourceSecurityGroupId: !Ref SwarmWorkerSecurityGroup
+        - IpProtocol: udp
+          FromPort: 7946
+          ToPort: 7946
+          SourceSecurityGroupId: !Ref SwarmWorkerSecurityGroup
+        - IpProtocol: udp
+          FromPort: 4789
+          ToPort: 4789
+          SourceSecurityGroupId: !Ref SwarmWorkerSecurityGroup
+      Tags:
+        - Key: Name
+          Value: "DOCKER_SWARM_MANAGER"
+
+  SwarmWorkerSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: "Security Group for Docker Swarm Workers"
+      VpcId: !ImportValue networking-VPCId
+      Tags:
+        - Key: Name
+          Value: "DOCKER_SWARM_WORKER"
+
+  SwarmWorkerToManagerIngress:
+    Type: AWS::EC2::SecurityGroupIngress
+    Properties:
+      GroupId: !Ref SwarmManagerSecurityGroup
+      IpProtocol: tcp
+      FromPort: 7946
+      ToPort: 7946
+      SourceSecurityGroupId: !Ref SwarmWorkerSecurityGroup
+
+  SwarmWorkerToManagerIngressUDP:
+    Type: AWS::EC2::SecurityGroupIngress
+    Properties:
+      GroupId: !Ref SwarmManagerSecurityGroup
+      IpProtocol: udp
+      FromPort: 7946
+      ToPort: 7946
+      SourceSecurityGroupId: !Ref SwarmWorkerSecurityGroup
+
+  SwarmWorkerToManagerOverlayNetwork:
+    Type: AWS::EC2::SecurityGroupIngress
+    Properties:
+      GroupId: !Ref SwarmManagerSecurityGroup
+      IpProtocol: udp
+      FromPort: 4789
+      ToPort: 4789
+      SourceSecurityGroupId: !Ref SwarmWorkerSecurityGroup
+
+  SwarmManagerToWorkerIngress:
+    Type: AWS::EC2::SecurityGroupIngress
+    Properties:
+      GroupId: !Ref SwarmWorkerSecurityGroup
+      IpProtocol: tcp
+      FromPort: 7946
+      ToPort: 7946
+      SourceSecurityGroupId: !Ref SwarmManagerSecurityGroup
+
+  SwarmManagerToWorkerIngressUDP:
+    Type: AWS::EC2::SecurityGroupIngress
+    Properties:
+      GroupId: !Ref SwarmWorkerSecurityGroup
+      IpProtocol: udp
+      FromPort: 7946
+      ToPort: 7946
+      SourceSecurityGroupId: !Ref SwarmManagerSecurityGroup
+
+  SwarmManagerToWorkerOverlayNetwork:
+    Type: AWS::EC2::SecurityGroupIngress
+    Properties:
+      GroupId: !Ref SwarmWorkerSecurityGroup
+      IpProtocol: udp
+      FromPort: 4789
+      ToPort: 4789
+      SourceSecurityGroupId: !Ref SwarmManagerSecurityGroup
+  
 
 Outputs:
   SshAccessSecurityGroupId:
@@ -137,3 +223,15 @@ Outputs:
     Value: !Ref AlbSecurityGroup
     Export:
       Name: !Sub "${AWS::StackName}-AlbSecurityGroupId"
+  
+  SwarmManagerSecurityGroupId:
+    Description: "Security Group ID for Swarm Manager"
+    Value: !Ref SwarmManagerSecurityGroup
+    Export:
+      Name: !Sub "${AWS::StackName}-SwarmManagerSecurityGroupId"
+  
+  SwarmWorkerSecurityGroupId:
+    Description: "ID of the Swarm Worker Security Group"
+    Value: !Ref SwarmWorkerSecurityGroup
+    Export:
+      Name: !Sub "${AWS::StackName}-SwarmWorkerSecurityGroupId"
