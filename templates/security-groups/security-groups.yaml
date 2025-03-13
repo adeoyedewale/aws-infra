@@ -131,18 +131,22 @@ Resources:
           FromPort: 2377
           ToPort: 2377
           SourceSecurityGroupId: !Ref SwarmWorkerSecurityGroup
+          Description: "Allows worker nodes to communicate with manager nodes for cluster management"
         - IpProtocol: "tcp"
           FromPort: 7946
           ToPort: 7946
           SourceSecurityGroupId: !Ref SwarmWorkerSecurityGroup
+          Description: "Allows TCP-based intra-cluster communication between Swarm nodes"
         - IpProtocol: udp
           FromPort: 7946
           ToPort: 7946
           SourceSecurityGroupId: !Ref SwarmWorkerSecurityGroup
+          Description: "Allows UDP-based intra-cluster communication between Swarm nodes"
         - IpProtocol: udp
           FromPort: 4789
           ToPort: 4789
           SourceSecurityGroupId: !Ref SwarmWorkerSecurityGroup
+          Description: "Allows overlay network traffic for Swarm service"
       Tags:
         - Key: Name
           Value: "DOCKER_SWARM_MANAGER"
@@ -158,75 +162,63 @@ Resources:
 
   SwarmWorkerToManagerIngress:
     Type: AWS::EC2::SecurityGroupIngress
-    DependsOn:
-      - SwarmManagerSecurityGroup
-      - SwarmWorkerSecurityGroup
     Properties:
       GroupId: !Ref SwarmManagerSecurityGroup
       IpProtocol: tcp
       FromPort: 7946
       ToPort: 7946
       SourceSecurityGroupId: !Ref SwarmWorkerSecurityGroup
+      Description: "Allows TCP communication from workers to managers"
 
   SwarmWorkerToManagerIngressUDP:
     Type: AWS::EC2::SecurityGroupIngress
-    DependsOn:
-      - SwarmManagerSecurityGroup
-      - SwarmWorkerSecurityGroup
     Properties:
       GroupId: !Ref SwarmManagerSecurityGroup
       IpProtocol: udp
       FromPort: 7946
       ToPort: 7946
       SourceSecurityGroupId: !Ref SwarmWorkerSecurityGroup
+      Description: "Allows UDP communication from workers to managers"
 
   SwarmWorkerToManagerOverlayNetwork:
     Type: AWS::EC2::SecurityGroupIngress
-    DependsOn:
-      - SwarmManagerSecurityGroup
-      - SwarmWorkerSecurityGroup
     Properties:
       GroupId: !Ref SwarmManagerSecurityGroup
       IpProtocol: udp
       FromPort: 4789
       ToPort: 4789
       SourceSecurityGroupId: !Ref SwarmWorkerSecurityGroup
+      Description: "Allows overlay network traffic from workers to managers"
 
   SwarmManagerToWorkerIngress:
     Type: AWS::EC2::SecurityGroupIngress
-    DependsOn:
-      - SwarmManagerSecurityGroup
-      - SwarmWorkerSecurityGroup
     Properties:
       GroupId: !Ref SwarmWorkerSecurityGroup
       IpProtocol: tcp
       FromPort: 7946
       ToPort: 7946
       SourceSecurityGroupId: !Ref SwarmManagerSecurityGroup
+      Description: "Allows TCP communication from managers to workers"
 
   SwarmManagerToWorkerIngressUDP:
     Type: AWS::EC2::SecurityGroupIngress
-    DependsOn:
-      - SwarmManagerSecurityGroup
-      - SwarmWorkerSecurityGroup
     Properties:
       GroupId: !Ref SwarmWorkerSecurityGroup
       IpProtocol: udp
       FromPort: 7946
       ToPort: 7946
       SourceSecurityGroupId: !Ref SwarmManagerSecurityGroup
+      Description: "Allows UDP communication from managers to workers"
 
   SwarmManagerToWorkerOverlayNetwork:
     Type: AWS::EC2::SecurityGroupIngress
-    DependsOn:
-      - SwarmManagerSecurityGroup
-      - SwarmWorkerSecurityGroup
     Properties:
       GroupId: !Ref SwarmWorkerSecurityGroup
       IpProtocol: udp
       FromPort: 4789
       ToPort: 4789
       SourceSecurityGroupId: !Ref SwarmManagerSecurityGroup
+      Description: "Allows overlay network traffic from managers to workers"
   
 
 Outputs:
