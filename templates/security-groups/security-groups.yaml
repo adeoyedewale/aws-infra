@@ -130,7 +130,7 @@ Resources:
         - IpProtocol: "tcp"
           FromPort: 2377
           ToPort: 2377
-          CidrIp: !Ref SwarmWorkerSecurityGroup
+          SourceSecurityGroupId: !Ref SwarmWorkerSecurityGroup
         - IpProtocol: "tcp"
           FromPort: 7946
           ToPort: 7946
