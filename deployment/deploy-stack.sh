@@ -2,8 +2,16 @@
 
 STACK_NAME=$1
 
+# ANSI Color Codes
+RED='\e[31m'
+GREEN='\e[32m'
+YELLOW='\e[33m'
+CYAN='\e[36m'
+RESET='\e[0m'
+
+
 if [[ -z "$STACK_NAME" ]]; then
-  echo "Usage: $0 <stack-name>"
+  echo -e "${RED}Usage: $0 <stack-name>${RESET}"
   exit 1
 fi
 
@@ -18,17 +26,17 @@ STACK_TEMPLATES[storage]="templates/storage/storage.yaml"
 # Check if stack exists in mapping
 TEMPLATE_FILE=${STACK_TEMPLATES[$STACK_NAME]}
 if [[ -z "$TEMPLATE_FILE" ]]; then
-  echo "Unknown stack: $STACK_NAME. Available stacks: ${!STACK_TEMPLATES[@]}"
+  echo -e "${RED}Unknown stack: $STACK_NAME. Available stacks: ${!STACK_TEMPLATES[@]}${RESET}"
   exit 1
 fi
 
 # Check if a parameter file exists for the stack
 PARAMS_FILE="templates/$STACK_NAME/params/dev-params.json"
 if [[ -f "$PARAMS_FILE" ]]; then
-  echo "Using parameter file: $PARAMS_FILE"
+  echo -e "${CYAN}Using parameter file: $PARAMS_FILE${RESET}"
   PARAM_OVERRIDE="--parameter-overrides file://$PARAMS_FILE"
 else
-  echo "No parameter file found for $STACK_NAME, skipping parameters."
+  echo -e "${YELLOW}No parameter file found for $STACK_NAME, skipping parameters.${RESET}"
   PARAM_OVERRIDE=""
 fi
 
@@ -39,8 +47,8 @@ aws cloudformation deploy --stack-name "$STACK_NAME" \
   --capabilities CAPABILITY_NAMED_IAM CAPABILITY_AUTO_EXPAND
 
 if [ $? -eq 0 ]; then
-  echo "Successfully deployed $STACK_NAME."
+  echo -e "${GREEN}Successfully deployed $STACK_NAME.${RESET}"
 else
-  echo "Deployment failed for $STACK_NAME."
+  echo -e "${RED}Deployment failed for $STACK_NAME.${RESET}"
   exit 1
 fi
