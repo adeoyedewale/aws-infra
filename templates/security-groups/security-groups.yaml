@@ -2,42 +2,42 @@ AWSTemplateFormatVersion: 2010-09-09
 Description: "Security Groups for SSH Access (Specific IPs) and Internet-Facing ALB"
 
 Parameters:
-  OpsAllowedIP1:
+  SshAccessAllowedIP1:
     Type: String
     Description: "Michelle WS Home"
-  OpsAllowedIP2:
+  SshAccessAllowedIP2:
     Type: String
     Description: "Michelle WS Home 2"
-  OpsAllowedIP3:
+  SshAccessAllowedIP3:
     Type: String
     Description: "Nick Home 2"
-  OpsAllowedIP4:
+  SshAccessAllowedIP4:
     Type: String
     Description: "Troy WS Home"
-  OpsAllowedIP5:
+  SshAccessAllowedIP5:
     Type: String
     Description: "WS Office"
-  OpsAllowedIP6:
+  SshAccessAllowedIP6:
     Type: String
     Description: "Cindy WS Home"
-  OpsAllowedIP7:
+  SshAccessAllowedIP7:
     Type: String
     Description: "Tin WS Home"
-  OpsAllowedIP8:
+  SshAccessAllowedIP8:
     Type: String
     Description: "Nick WS Home"
-  OpsAllowedIP9:
+  SshAccessAllowedIP9:
     Type: String
     Description: "Wale WS Home"
-  OpsAllowedIP10:
+  SshAccessAllowedIP10:
     Type: String
     Description: "OPENVPN Access"
-  OpsAllowedIP11:
+  SshAccessAllowedIP11:
     Type: String
     Description: "Chris WS Home"
 
 Resources:
-  OpsSecurityGroup:
+  SshAccessSecurityGroup:
     Type: AWS::EC2::SecurityGroup
     Properties:
       GroupDescription: "Allows SSH access only from specific IPs"
@@ -46,57 +46,57 @@ Resources:
         - IpProtocol: "tcp"
           FromPort: 22
           ToPort: 22
-          CidrIp: !Sub "${OpsAllowedIP1}/32"
+          CidrIp: !Sub "${SshAccessAllowedIP1}/32"
           Description: "Michelle WS Home"
         - IpProtocol: "tcp"
           FromPort: 22
           ToPort: 22
-          CidrIp: !Sub "${OpsAllowedIP2}/32"
+          CidrIp: !Sub "${SshAccessAllowedIP2}/32"
           Description: "Michelle WS Home 2"
         - IpProtocol: "tcp"
           FromPort: 22
           ToPort: 22
-          CidrIp: !Sub "${OpsAllowedIP3}/32"
+          CidrIp: !Sub "${SshAccessAllowedIP3}/32"
           Description: "Nick Home 2"
         - IpProtocol: "tcp"
           FromPort: 22
           ToPort: 22
-          CidrIp: !Sub "${OpsAllowedIP4}/32"
+          CidrIp: !Sub "${SshAccessAllowedIP4}/32"
           Description: "Troy WS Home"
         - IpProtocol: "tcp"
           FromPort: 22
           ToPort: 22
-          CidrIp: !Sub "${OpsAllowedIP5}/32"
+          CidrIp: !Sub "${SshAccessAllowedIP5}/32"
           Description: "WS Office"
         - IpProtocol: "tcp"
           FromPort: 22
           ToPort: 22
-          CidrIp: !Sub "${OpsAllowedIP6}/32"
+          CidrIp: !Sub "${SshAccessAllowedIP6}/32"
           Description: "Cindy WS Home"
         - IpProtocol: "tcp"
           FromPort: 22
           ToPort: 22
-          CidrIp: !Sub "${OpsAllowedIP7}/32"
+          CidrIp: !Sub "${SshAccessAllowedIP7}/32"
           Description: "Tin WS Home"
         - IpProtocol: "tcp"
           FromPort: 22
           ToPort: 22
-          CidrIp: !Sub "${OpsAllowedIP8}/32"
+          CidrIp: !Sub "${SshAccessAllowedIP8}/32"
           Description:  "Nick WS Home"
         - IpProtocol: "tcp"
           FromPort: 22
           ToPort: 22
-          CidrIp: !Sub "${OpsAllowedIP9}/32"
+          CidrIp: !Sub "${SshAccessAllowedIP9}/32"
           Description: "Wale WS Home"
         - IpProtocol: "tcp"
           FromPort: 22
           ToPort: 22
-          CidrIp: !Sub "${OpsAllowedIP10}/32"
+          CidrIp: !Sub "${SshAccessAllowedIP10}/32"
           Description: "OPENVPN Access"
         - IpProtocol: "tcp"
           FromPort: 22
           ToPort: 22
-          CidrIp: !Sub "${OpsAllowedIP11}/32"
+          CidrIp: !Sub "${SshAccessAllowedIP11}/32"
           Description: "Chris WS Home"
       Tags:
         - Key: Name
@@ -126,11 +126,11 @@ Resources:
           Value: "INTERNET_FACING_ALB"
 
 Outputs:
-  OpsSecurityGroupId:
+  SshAccessSecurityGroupId:
     Description: "Security Group ID for SSH Access"
-    Value: !Ref OpsSecurityGroup
+    Value: !Ref SshAccessSecurityGroup
     Export:
-      Name: !Sub "${AWS::StackName}-OpsSecurityGroupId"
+      Name: !Sub "${AWS::StackName}-SshAccessSecurityGroupId"
 
   AlbSecurityGroupId:
     Description: "Security Group ID for Internet-Facing ALB"
