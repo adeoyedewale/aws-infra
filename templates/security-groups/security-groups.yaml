@@ -158,6 +158,9 @@ Resources:
 
   SwarmWorkerToManagerIngress:
     Type: AWS::EC2::SecurityGroupIngress
+    DependsOn:
+      - SwarmManagerSecurityGroup
+      - SwarmWorkerSecurityGroup
     Properties:
       GroupId: !Ref SwarmManagerSecurityGroup
       IpProtocol: tcp
@@ -167,6 +170,9 @@ Resources:
 
   SwarmWorkerToManagerIngressUDP:
     Type: AWS::EC2::SecurityGroupIngress
+    DependsOn:
+      - SwarmManagerSecurityGroup
+      - SwarmWorkerSecurityGroup
     Properties:
       GroupId: !Ref SwarmManagerSecurityGroup
       IpProtocol: udp
@@ -176,6 +182,9 @@ Resources:
 
   SwarmWorkerToManagerOverlayNetwork:
     Type: AWS::EC2::SecurityGroupIngress
+    DependsOn:
+      - SwarmManagerSecurityGroup
+      - SwarmWorkerSecurityGroup
     Properties:
       GroupId: !Ref SwarmManagerSecurityGroup
       IpProtocol: udp
@@ -185,6 +194,9 @@ Resources:
 
   SwarmManagerToWorkerIngress:
     Type: AWS::EC2::SecurityGroupIngress
+    DependsOn:
+      - SwarmManagerSecurityGroup
+      - SwarmWorkerSecurityGroup
     Properties:
       GroupId: !Ref SwarmWorkerSecurityGroup
       IpProtocol: tcp
@@ -194,6 +206,9 @@ Resources:
 
   SwarmManagerToWorkerIngressUDP:
     Type: AWS::EC2::SecurityGroupIngress
+    DependsOn:
+      - SwarmManagerSecurityGroup
+      - SwarmWorkerSecurityGroup
     Properties:
       GroupId: !Ref SwarmWorkerSecurityGroup
       IpProtocol: udp
@@ -203,6 +218,9 @@ Resources:
 
   SwarmManagerToWorkerOverlayNetwork:
     Type: AWS::EC2::SecurityGroupIngress
+    DependsOn:
+      - SwarmManagerSecurityGroup
+      - SwarmWorkerSecurityGroup
     Properties:
       GroupId: !Ref SwarmWorkerSecurityGroup
       IpProtocol: udp
