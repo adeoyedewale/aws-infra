@@ -1,5 +1,5 @@
 AWSTemplateFormatVersion: 2010-09-09
-Description: "Security Groups for SSH Access (Specific IPs) and Internet-Facing ALB"
+Description: "Security Groups for SSH Access (Specific IPs), Internet-Facing ALB, amd Docker"
 
 Parameters:
   SshAccessAllowedIP1:
